@@ -14,24 +14,24 @@ class OzelSharedPreferences {
 
         private var lock = Any()
 
-        operator fun invoke(context: Context) = instance ?: synchronized(lock){
+        operator fun invoke(context: Context) = instance ?: synchronized(lock) {
             instance ?: createSharedPreferences(context).also {
                 instance = it
             }
         }
 
         private fun createSharedPreferences(context: Context): OzelSharedPreferences {
-            sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context)
+            sharedPreferences =
+                androidx.preference.PreferenceManager.getDefaultSharedPreferences(context)
             return OzelSharedPreferences()
         }
 
-        fun zamaniKaydet(zaman: Long){
-            sharedPreferences?.edit()?.putLong(TIME,zaman)?.apply()
-        }
-
-        fun zamaniAl() = sharedPreferences?.getLong(TIME,0)
-
-
     }
+
+    fun zamaniKaydet(zaman: Long) {
+        sharedPreferences?.edit()?.putLong(TIME, zaman)?.apply()
+    }
+
+    fun zamaniAl() = sharedPreferences?.getLong(TIME, 0)
 
 }

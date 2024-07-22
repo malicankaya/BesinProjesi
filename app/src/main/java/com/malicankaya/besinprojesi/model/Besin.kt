@@ -2,6 +2,7 @@ package com.malicankaya.besinprojesi.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity
@@ -25,3 +26,7 @@ data class Besin(
     @SerializedName("gorsel")
     val besinGorsel: String?
 )
+{
+    @PrimaryKey(autoGenerate = true)
+    var uuid: Int = 0
+}

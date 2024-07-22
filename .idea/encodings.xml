@@ -2,8 +2,8 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/build.gradle.kts" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/malicankaya/besinprojesi/service/BesinAPI.kt" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/malicankaya/besinprojesi/view/BesinListeFragment.kt" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/malicankaya/service/BesinAPI.kt" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

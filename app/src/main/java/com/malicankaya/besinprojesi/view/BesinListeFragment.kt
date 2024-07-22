@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.malicankaya.besinprojesi.databinding.FragmentBesinListeBinding
-import com.malicankaya.service.BesinAPI
+import com.malicankaya.besinprojesi.service.BesinAPI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,18 +39,7 @@ class BesinListeFragment : Fragment() {
         binding.hataTextView.visibility = View.INVISIBLE
         binding.progressBar.visibility = View.INVISIBLE
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://raw.githubusercontent.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(BesinAPI::class.java)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val besinler = retrofit.getBesin()
-            besinler.forEach {
-                println(it.besinIsim)
-            }
-        }
     }
 
     override fun onDestroy() {

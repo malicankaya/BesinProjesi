@@ -1,4 +1,4 @@
-package com.malicankaya.service
+package com.malicankaya.besinprojesi.service
 
 import com.malicankaya.besinprojesi.model.Besin
 import retrofit2.http.GET
