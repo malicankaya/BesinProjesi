@@ -15,16 +15,31 @@ import kotlinx.coroutines.withContext
 
 class BesinListeViewModel(application: Application) : AndroidViewModel(application){
 
-    private var besinListesi = MutableLiveData<List<Besin>>()
-    private var yukleniyorMu = MutableLiveData<Boolean>()
-    private var hataMesaji = MutableLiveData<Boolean>()
+    var besinListesi = MutableLiveData<List<Besin>>()
+    var yukleniyorMu = MutableLiveData<Boolean>()
+    var hataMesaji = MutableLiveData<Boolean>()
 
     private var besinApiServis = BesinApiServis()
 
-    private var ozelSharedPreferences = OzelSharedPreferences()
+    private var ozelSharedPreferences = OzelSharedPreferences(getApplication())
+
+    private val guncellenmeZamani = 1 * 60 * 1000 * 1000 * 1000L
+
+    fun refreshData(){
+        val kaydedilmeZamani = ozelSharedPreferences.zamaniAl()
+
+        if(kaydedilmeZamani != null && kaydedilmeZamani != 0L && System.nanoTime() - kaydedilmeZamani < guncellenmeZamani) {
+            besinleriRoomdanAl()
+        }else{
+            besinleriInternettenAl()
+        }
+    }
+
+    fun refrestDataFromInternet(){
+        besinleriInternettenAl()
+    }
 
     private fun besinleriInternettenAl(){
-
         yukleniyorMu.value = true
 
         viewModelScope.launch(Dispatchers.IO){
@@ -34,6 +49,20 @@ class BesinListeViewModel(application: Application) : AndroidViewModel(applicati
                 //rooma kaydet
                 roomaKaydet(besinler)
                 Toast.makeText(getApplication(),"Besinleri internetten aldık.",Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun besinleriRoomdanAl() {
+        yukleniyorMu.value = true
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val dao = BesinDatabase(getApplication()).besinDao()
+            val besinListesi= dao.getAllBesin()
+            withContext(Dispatchers.Main){
+                besinListesiniGuncelle(besinListesi)
+                yukleniyorMu.value = false
+                Toast.makeText(getApplication(),"Besinleri roomdan aldık",Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -53,9 +82,8 @@ class BesinListeViewModel(application: Application) : AndroidViewModel(applicati
             for (i in uuidList.indices){
                 besinListesi[i].uuid = uuidList[i].toInt()
             }
-
-            besinListesiniGuncelle(besinListesi)
         }
+        besinListesiniGuncelle(besinListesi)
         ozelSharedPreferences.zamaniKaydet(System.nanoTime())
     }
 
